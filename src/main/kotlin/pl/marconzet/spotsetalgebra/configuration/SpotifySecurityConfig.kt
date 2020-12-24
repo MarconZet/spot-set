@@ -11,10 +11,13 @@ import org.springframework.security.config.web.servlet.invoke
 class SpotifySecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http {
-            authorizeRequests {
-
-            }
             httpBasic {}
+            authorizeRequests {
+                authorize("/callback/**", permitAll)
+                authorize("/oauth2/authorization/**", permitAll)
+                authorize(anyRequest, authenticated)
+            }
+            oauth2Login {  }
         }
     }
 }
