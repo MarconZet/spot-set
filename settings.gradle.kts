@@ -1,1 +1,1 @@
-rootProject.name = "spot-set-algebra"
+rootProject.name = "spot-set"

@@ -1,0 +1,15 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/callback"
+            scope: "user-read-email"
+            authorization-grant-type: authorization_code
+        provider:
+          spotify:
+            authorization-uri: "https://accounts.spotify.com/authorize"
+            token-uri: "https://accounts.spotify.com/api/token"
