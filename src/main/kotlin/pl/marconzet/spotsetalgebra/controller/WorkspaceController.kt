@@ -1,27 +1,24 @@
 package pl.marconzet.spotsetalgebra.controller
 
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient
-import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.client.HttpClientErrorException
-import pl.marconzet.spotsetalgebra.configuration.SpotifyApi
+import org.springframework.web.bind.annotation.RestController
+import pl.marconzet.spotsetalgebra.service.Spotify
 
 
-@Controller
-class WorkspaceController {
-    @GetMapping("/")
-    fun landing(model: Model) : String {
-        return "index"
-    }
+@RestController
+class WorkspaceController(
+    private val spotify: Spotify
+) {
 
     @GetMapping("/workspace")
-    @ResponseBody
-    fun workspace(@RegisteredOAuth2AuthorizedClient("spotify") authorizedClient: OAuth2AuthorizedClient): String {
-        val accessToken = authorizedClient.accessToken.tokenValue ?: throw RuntimeException()
-        val rest = SpotifyApi(accessToken)
-        return rest.getProfile()
+    fun workspace2(): String {
+        return spotify.getProfile()
     }
+
+//    @GetMapping("/workspace")
+//    fun workspace(@RegisteredOAuth2AuthorizedClient("spotify") authorizedClient: OAuth2AuthorizedClient): String {
+//        val accessToken = authorizedClient.accessToken.tokenValue ?: throw RuntimeException()
+//        val rest = Spotify(accessToken)
+//        return rest.getProfile()
+//    }
 }
