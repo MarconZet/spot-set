@@ -1,4 +1,4 @@
-package pl.marconzet.spotsetalgebra.service
+package pl.marconzet.spotset.service
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
@@ -6,12 +6,21 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
-import kotlin.RuntimeException
+import pl.marconzet.spotset.configuration.SpotifyConfig
+import pl.marconzet.spotset.data.api.ApiBinding
 
 @Service
 @RequestScope
-class Spotify(authorizedClientService: OAuth2AuthorizedClientService){
-    private val baseUrl = "https://api.spotify.com/v1"
+class Spotify(
+    authorizedClientService: OAuth2AuthorizedClientService,
+    spotifyConfig: SpotifyConfig
+) {
+    private val baseUrl = spotifyConfig.baseUrl
+    private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
+
+    fun getProfile(): String {
+        return restTemplate.getForObject("$baseUrl/me", String::class.java) ?: throw RuntimeException()
+    }
 
     private fun getAccessToken(authorizedClientService: OAuth2AuthorizedClientService) =
         try {
@@ -25,10 +34,4 @@ class Spotify(authorizedClientService: OAuth2AuthorizedClientService){
         } catch (e: Throwable) {
             null
         }
-
-    val binding = ApiBinding(getAccessToken(authorizedClientService))
-
-    fun getProfile() : String{
-        return binding.restTemplate.getForObject("$baseUrl/me", String::class.java) ?: throw RuntimeException()
-    }
 }

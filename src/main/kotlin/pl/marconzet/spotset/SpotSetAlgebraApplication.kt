@@ -1,4 +1,4 @@
-package pl.marconzet.spotsetalgebra
+package pl.marconzet.spotset
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
