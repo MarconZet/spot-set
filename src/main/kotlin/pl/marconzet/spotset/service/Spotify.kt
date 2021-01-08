@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 import pl.marconzet.spotset.configuration.SpotifyConfig
-import pl.marconzet.spotset.data.api.ApiBinding
+import pl.marconzet.spotset.security.ApiBinding
 
 @Service
 @RequestScope

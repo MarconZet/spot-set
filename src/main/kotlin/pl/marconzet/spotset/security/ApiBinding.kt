@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.data.api
+package pl.marconzet.spotset.security
 
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.web.client.RestTemplate

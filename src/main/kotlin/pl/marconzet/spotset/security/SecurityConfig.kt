@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.configuration
+package pl.marconzet.spotset.security
 
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -18,6 +18,15 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             }
             oauth2Login {
                 defaultSuccessUrl("/workspace", false)
+            }
+
+            csrf {
+                disable()
+            }
+            headers {
+                frameOptions {
+                    disable()
+                }
             }
         }
     }
