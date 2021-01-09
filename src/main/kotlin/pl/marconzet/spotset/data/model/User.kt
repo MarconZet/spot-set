@@ -9,6 +9,6 @@ import javax.persistence.GenerationType
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long?,
+    val id: Long = 0,
     val spotifyId: String
 )

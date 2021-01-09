@@ -13,7 +13,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         http {
 
             authorizeRequests {
-                authorize("/workspace/**", authenticated)
+                authorize("/workspace/**", hasRole("USER"))
                 authorize(anyRequest, permitAll)
             }
             oauth2Login {

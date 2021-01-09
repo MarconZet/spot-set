@@ -11,7 +11,7 @@ class SpotifyOAuth2User(
     private val authorities: MutableCollection<out GrantedAuthority>
 ) : OAuth2User {
 
-    override fun getName() = user.id?.toString() ?: throw IllegalStateException()
+    override fun getName() = user.id.toString()
 
     override fun getAttributes() = attributes
 
