@@ -1,3 +1,6 @@
 package pl.marconzet.spotset.data.api
 
-data class Copyright()
+data class Copyright(
+    val text: String,
+    val type: String
+)

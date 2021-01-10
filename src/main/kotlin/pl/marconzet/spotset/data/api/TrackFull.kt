@@ -1,3 +1,3 @@
 package pl.marconzet.spotset.data.api
 
-data class ExternalId()
+data class TrackFull()

@@ -1,10 +1,8 @@
 package pl.marconzet.spotset.data.api
 
-data class ArtistSimple(
-    val externalUrls: ExternalUrl,
+data class Category(
     val href: String,
+    val icons: List<Image>,
     val id: String,
     val name: String,
-    val type: String,
-    val uri: String
 )
