@@ -1,10 +1,13 @@
-package pl.marconzet.spotset.security
+package pl.marconzet.spotset.configuration
 
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.web.client.RestTemplate
 
 class ApiBinding(private val accessToken: String?) {
-    val restTemplate: RestTemplate = RestTemplate().apply { interceptors.add(interceptor()) }
+    val restTemplate: RestTemplate = RestTemplate().apply {
+        interceptors.add(interceptor())
+        errorHandler = RestTemplateErrorHandler()
+    }
 
     private fun interceptor(): ClientHttpRequestInterceptor {
         return accessToken?.let {
