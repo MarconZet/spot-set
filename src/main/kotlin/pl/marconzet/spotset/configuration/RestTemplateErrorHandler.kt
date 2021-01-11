@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.ResponseErrorHandler
-import pl.marconzet.spotset.data.api.Error
+import pl.marconzet.spotset.data.api.SpotifyError
 import pl.marconzet.spotset.exception.SpotifyApiException
 
 class RestTemplateErrorHandler : ResponseErrorHandler {
@@ -14,7 +14,7 @@ class RestTemplateErrorHandler : ResponseErrorHandler {
     }
 
     override fun handleError(response: ClientHttpResponse) {
-        val error: Error = mapper.readValue(response.body)
+        val error: SpotifyError = mapper.readValue(response.body)
         throw SpotifyApiException(error)
     }
 

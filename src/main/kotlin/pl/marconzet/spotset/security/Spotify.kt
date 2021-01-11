@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 import pl.marconzet.spotset.configuration.ApiBinding
 import pl.marconzet.spotset.configuration.SpotifyConfig
+import pl.marconzet.spotset.data.api.SpotifyUserPrivate
 
 @Service
 @RequestScope
@@ -21,8 +22,8 @@ class Spotify(
     private val baseUrl = spotifyConfig.baseUrl
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
 
-    fun getProfile(): String {
-        return restTemplate.getForObject("$baseUrl/me", String::class.java) ?: throw RuntimeException()
+    fun getProfile(): SpotifyUserPrivate {
+        return restTemplate.getForObject("$baseUrl/me", SpotifyUserPrivate::class.java) ?: throw RuntimeException()
     }
 
     private fun getAccessToken(authorizedClientService: OAuth2AuthorizedClientService) =

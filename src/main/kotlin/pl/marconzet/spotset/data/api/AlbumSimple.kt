@@ -8,7 +8,7 @@ data class AlbumSimple (
     val externalUrls: ExternalUrl,
     val href: String,
     val id: String,
-    val images: List<Image>,
+    val images: List<SpotifyImage>,
     val name: String,
     val releaseDate: String,
     val releaseDatePrecision: String,

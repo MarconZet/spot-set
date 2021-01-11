@@ -6,7 +6,7 @@ data class ArtistFull(
     val genres: List<String>,
     val href: String,
     val id: String,
-    val images: List<Image>,
+    val images: List<SpotifyImage>,
     val name: String,
     val popularity: Int,
     val type: String,

@@ -10,7 +10,7 @@ data class AlbumFull(
     val genres: List<String>,
     val href: String,
     val id: String,
-    val images: List<Image>,
+    val images: List<SpotifyImage>,
     val label: String,
     val name: String,
     val popularity: Int,

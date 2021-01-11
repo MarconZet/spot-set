@@ -7,7 +7,7 @@ spring:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
             redirect-uri: "{baseUrl}/login/oauth2/code/spotify"
-            scope: "user-read-email"
+            scope: "user-library-read+playlist-read-private"
             authorization-grant-type: authorization_code
         provider:
           spotify:
