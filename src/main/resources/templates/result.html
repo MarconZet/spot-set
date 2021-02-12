@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +13,10 @@
 </head>
 <body>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Spot Set</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#" th:href="@{'/workspace'}">Spot Set</a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
+            <a class="nav-link" href="#" th:href="@{/'logout'}">Sign out</a>
         </li>
     </ul>
 </header>
@@ -24,7 +24,7 @@
     <div class="row">
         <main class="col-xl-5 col-l-6 col-md-9 justify-content-center mx-auto">
             <h1 class="border-bottom">Results</h1>
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush" th:remove="all-but-first">
                 <li class="list-group-item">An item</li>
                 <li class="list-group-item">A second item</li>
                 <li class="list-group-item">A third item</li>

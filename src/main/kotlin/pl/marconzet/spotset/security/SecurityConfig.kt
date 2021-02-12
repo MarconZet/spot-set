@@ -11,13 +11,16 @@ import org.springframework.security.config.web.servlet.invoke
 class SecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http {
-
+            logout {
+                logoutSuccessUrl = "/"
+                logoutUrl = "/logout"
+            }
             authorizeRequests {
                 authorize("/workspace/**", hasRole("USER"))
                 authorize(anyRequest, permitAll)
             }
             oauth2Login {
-                defaultSuccessUrl("/workspace", false)
+                defaultSuccessUrl("/workspace", true)
             }
 
             csrf {

@@ -12,7 +12,7 @@
 </head>
 <body>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Spot Set</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#" th:href="@{'/workspace'}">Spot Set</a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
             <a class="nav-link" href="" th:href="@{'/oauth2/authorization/spotify'}">Log in</a>
@@ -38,7 +38,7 @@
         </p>
     </div>
     <div class="row">
-        <a th:href="@{'/oauth2/authorization/spotify'}" class="col-auto mx-auto btn btn-primary ">Log in with Spotify</a>
+        <a href="" th:href="@{'/oauth2/authorization/spotify'}" class="col-auto mx-auto btn btn-primary ">Log in with Spotify</a>
     </div>
 </main>
 </body>
