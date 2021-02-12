@@ -3,11 +3,11 @@ package pl.marconzet.spotset.data.model
 import javax.persistence.*
 
 @Entity
-data class User(
+data class Query(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
-    val spotifyId: String,
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
-    val queryHistory: List<Query>
+    @ManyToOne
+    val user: User,
+    val query_text: String
 )

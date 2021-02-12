@@ -20,7 +20,7 @@ class LoginOAuth2UserService(
         val oAuth2UserInfo = super.loadUser(userRequest)
 
         val user = userRepository.getUserBySpotifyId(oAuth2UserInfo.name)
-            ?: userRepository.save(User(0, oAuth2UserInfo.name))
+            ?: userRepository.save(User(0, oAuth2UserInfo.name, emptyList()))
 
         return SpotifyOAuth2User(user, oAuth2UserInfo.attributes, oAuth2UserInfo.authorities)
     }
