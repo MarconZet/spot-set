@@ -41,7 +41,12 @@
         <main class="col-md-9, col-lg-10 mx-auto pt-3">
             <form>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="queryInputValue" placeholder="Input your query">
+                    <input type="text" class="form-control" id="queryInputValue" list="datalist" placeholder="Input your query">
+                    <datalist id="datalist">
+                        <option value="A+B">
+                        <option value="A-B">
+                        <option value="(A+B)-C">
+                    </datalist>
                     <button class="btn btn-outline-secondary btn-outline-dark" type="button">Submit</button>
                 </div>
             </form>
