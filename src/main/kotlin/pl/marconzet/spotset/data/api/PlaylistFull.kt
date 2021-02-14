@@ -12,7 +12,7 @@ data class PlaylistFull(
     val owner: SpotifyUserPublic,
     val public: Boolean?,
     val snapshot_id: String,
-    val tracks: Paging<PlaylistTrack>,
+    val tracks: Paging,
     val type: String,
     val uri: String
 )

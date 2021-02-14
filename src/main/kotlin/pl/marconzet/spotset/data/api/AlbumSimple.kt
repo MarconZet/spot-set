@@ -13,7 +13,7 @@ data class AlbumSimple (
     val releaseDate: String,
     val releaseDatePrecision: String,
     val restriction: AlbumRestriction?,
-    val tracks: Paging<TrackSimple>,
+    val tracks: Paging,
     val type: String,
     val uri: String
 )

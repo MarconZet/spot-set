@@ -16,6 +16,7 @@ class WorkspaceService(
     fun getWorkspace(spotifyOAuth2User: SpotifyOAuth2User): WorkspaceDTO {
         val userId = spotifyOAuth2User.name
         val queries = userRepository.getUserById(userId.toLong()).queryHistory.map { it.query_text }
-        return WorkspaceDTO(emptyList(), queries)
+        val playlists = spotify.getPlaylists().map { it.name }
+        return WorkspaceDTO(playlists, queries)
     }
 }

@@ -11,7 +11,7 @@ data class PlaylistSimple(
     val owner: SpotifyUserPublic,
     val public: Boolean?,
     val snapshot_id: String,
-    val tracks: Paging<PlaylistTrack>,
+    val tracks: Tracks?,
     val type: String,
     val uri: String
 )
