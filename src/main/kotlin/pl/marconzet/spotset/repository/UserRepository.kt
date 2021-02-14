@@ -7,4 +7,5 @@ import pl.marconzet.spotset.data.model.User
 @Repository
 interface UserRepository : CrudRepository<User, Long> {
     fun getUserBySpotifyId(spotifyId: String) : User?
+    fun getUserById(id: Long) : User
 }
