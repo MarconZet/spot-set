@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 import pl.marconzet.spotset.configuration.ApiBinding
 import pl.marconzet.spotset.configuration.SpotifyConfig
-import pl.marconzet.spotset.data.api.Paging
 import pl.marconzet.spotset.data.api.PlaylistPaging
 import pl.marconzet.spotset.data.api.PlaylistSimple
 import pl.marconzet.spotset.data.api.SpotifyUserPrivate
@@ -38,7 +37,7 @@ class Spotify(
     }
 
     fun getPlaylists(): List<PlaylistSimple> {
-        logger.info(restTemplate.getForObject("$baseUrl/me/playlists", String::class.java))
+//        logger.info(restTemplate.getForObject("$baseUrl/me/playlists", String::class.java))
         return restTemplate.getForObject("$baseUrl/me/playlists", PlaylistPaging::class.java)?.items
             ?: throw RuntimeException()
     }

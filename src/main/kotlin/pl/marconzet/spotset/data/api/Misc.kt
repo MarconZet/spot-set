@@ -7,3 +7,7 @@ data class Tracks(
     val href: String,
     val total: Int
 )
+
+data class Paging(
+    val nothing: String
+)

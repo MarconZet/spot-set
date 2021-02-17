@@ -25,8 +25,8 @@
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     Available playlists
                 </h6>
-                <ul class="list-group list-group-flush flex-column mb-2 ">
-                    <li class="list-group-item">
+                <ul class="list-group list-group-flush flex-column mb-2" th:remove="all-but-first">
+                    <li class="list-group-item" th:each="playlist: ${workspace.playlists}" th:text="${playlist}">
                         Playlist 1
                     </li>
                     <li class="list-group-item">
@@ -39,11 +39,12 @@
             </div>
         </div>
         <main class="col-md-9, col-lg-10 mx-auto pt-3">
-            <form>
+            <form action="#" th:action="@{/workspace/query}" th:object="${form}" method="post">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="queryInputValue" list="datalist" placeholder="Input your query">
+                    <input type="text" class="form-control" id="queryInputValue" list="datalist"
+                           placeholder="Input your query" th:field="*{query}"/>
                     <datalist id="datalist" th:remove="all-but-first">
-                        <option value="A+B">
+                        <option value="A+B" th:each="query: ${workspace.queryHistory}" th:value="${query}">
                         <option value="A-B">
                         <option value="(A+B)-C">
                     </datalist>
