@@ -9,11 +9,13 @@ import pl.marconzet.spotset.data.dto.QueryDTO
 import pl.marconzet.spotset.exception.WrongPrincipalException
 import pl.marconzet.spotset.logger
 import pl.marconzet.spotset.security.SpotifyOAuth2User
+import pl.marconzet.spotset.workspace.query.QueryService
 
 @Controller
 @RequestMapping("/workspace")
 class WorkspaceController(
     private val workspaceService: WorkspaceService,
+    private val queryService: QueryService
 ) {
     val logger = logger()
 
@@ -31,7 +33,7 @@ class WorkspaceController(
     @PostMapping("query")
     fun query(@ModelAttribute("form") queryDTO: QueryDTO, errors: BindingResult, model: Model): String {
         logger.info(queryDTO.query)
-        model.addAttribute("result", workspaceService.processQuery(queryDTO.query ?: ""))
+        model.addAttribute("result", queryService.processQuery(queryDTO.query ?: ""))
         return "result"
     }
 }

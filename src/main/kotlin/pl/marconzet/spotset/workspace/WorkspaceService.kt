@@ -19,9 +19,4 @@ class WorkspaceService(
         val playlists = spotify.getPlaylists().map { it.name }
         return WorkspaceDTO(playlists, queries)
     }
-
-    fun processQuery(query: String): List<String> {
-
-        return listOf(query, "ale", "ma", "kot")
-    }
 }
