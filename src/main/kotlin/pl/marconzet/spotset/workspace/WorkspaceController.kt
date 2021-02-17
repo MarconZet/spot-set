@@ -31,6 +31,7 @@ class WorkspaceController(
     @PostMapping("query")
     fun query(@ModelAttribute("form") queryDTO: QueryDTO, errors: BindingResult, model: Model): String {
         logger.info(queryDTO.query)
+        model.addAttribute("result", workspaceService.processQuery(queryDTO.query ?: ""))
         return "result"
     }
 }
