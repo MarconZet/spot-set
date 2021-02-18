@@ -14,6 +14,8 @@ class QueryService(
     }
 
     fun compileQuery(query: String) {
-        queryInterpreter.lexicalAnalysis(query)
+        val tokens = queryInterpreter.lexicalAnalysis(query)
+        val ast = queryInterpreter.syntaxAnalysis(tokens)
+        val optimisedAst = queryInterpreter.semanticAnalysis(ast, 0)
     }
 }

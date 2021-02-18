@@ -2,7 +2,6 @@ package pl.marconzet.spotset.workspace.query
 
 import org.springframework.stereotype.Service
 import pl.marconzet.spotset.exception.InterpretationException
-import java.util.*
 
 @Service
 class QueryInterpreter {
@@ -15,6 +14,19 @@ class QueryInterpreter {
         return tokens
     }
 
+    fun syntaxAnalysis(tokens: List<Token>): AST {
+        val rpn = shuntingYardAlgorithm(tokens)
+        return buildAST(rpn)
+    }
+
+    fun semanticAnalysis(ast: AST, playlistsNumber: Int): AST {
+
+        fun walkTree(ast: AST): AST {
+
+        }
+    }
+
+
     private fun validateTokenization(query: String, tokens: List<Token>, lastChar: Int = 0): Boolean {
         if (tokens.isEmpty() and query.isBlank())
             return true
@@ -23,13 +35,8 @@ class QueryInterpreter {
         if (clearedQuery.startsWith(head.value)) {
             return validateTokenization(clearedQuery.removePrefix(head.value), tokens.drop(1), head.position)
         } else {
-            throw InterpretationException("Unable to tokenize input: unknown identifier around characters $lastChar-${head.position}")
+            throw InterpretationException("Lexical Error: Unknown identifier around characters $lastChar-${head.position}")
         }
-    }
-
-    fun syntaxAnalysis(tokens: List<Token>): AST {
-        val rpn = shuntingYardAlgorithm(tokens)
-        return buildAST(rpn)
     }
 
     private fun shuntingYardAlgorithm(tokens: List<Token>): List<Token> {
@@ -70,15 +77,15 @@ class QueryInterpreter {
 
         tokens.forEach { token ->
             when (token.type) {
-                TokenType.PLAYLIST -> ast.add(AST.Playlist(token))
-                TokenType.ALL_LIKED -> ast.add(AST.AllLiked(token))
+                TokenType.PLAYLIST -> ast.add(AST.DataSource.Playlist(token))
+                TokenType.ALL_LIKED -> ast.add(AST.DataSource.AllLiked(token))
                 in TokenType.operations -> {
                     val right = ast.removeLast()
                     val left = ast.removeLast()
                     when (token.type) {
-                        TokenType.UNION -> ast.add(AST.Union(left, token, right))
-                        TokenType.INTERSECTION -> ast.add(AST.Intersection(left, token, right))
-                        TokenType.DIFFERENCE -> ast.add(AST.Difference(left, token, right))
+                        TokenType.UNION -> ast.add(AST.Operation.Union(left, token, right))
+                        TokenType.INTERSECTION -> ast.add(AST.Operation.Intersection(left, token, right))
+                        TokenType.DIFFERENCE -> ast.add(AST.Operation.Difference(left, token, right))
                         else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
                     }
 
