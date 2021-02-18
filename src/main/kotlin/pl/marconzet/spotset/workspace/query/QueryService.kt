@@ -14,6 +14,6 @@ class QueryService(
     }
 
     fun compileQuery(query: String) {
-        queryInterpreter.tokenize(query)
+        queryInterpreter.lexicalAnalysis(query)
     }
 }

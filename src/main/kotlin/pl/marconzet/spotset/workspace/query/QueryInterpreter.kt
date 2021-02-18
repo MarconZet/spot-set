@@ -2,10 +2,11 @@ package pl.marconzet.spotset.workspace.query
 
 import org.springframework.stereotype.Service
 import pl.marconzet.spotset.exception.InterpretationException
+import java.util.*
 
 @Service
 class QueryInterpreter {
-    fun tokenize(query: String): List<Token> {
+    fun lexicalAnalysis(query: String): List<Token> {
         val tokenTypes = enumValues<TokenType>()
         val tokens = tokenTypes.flatMap { type ->
             type.pattern.toRegex().findAll(query).map { Token(type, it.value, it.range.first) }
@@ -24,5 +25,41 @@ class QueryInterpreter {
         } else {
             throw InterpretationException("Unable to tokenize input: unknown identifier around characters $lastChar-${head.position}")
         }
+    }
+
+    fun syntaxAnalysis(tokens: List<Token>): AST {
+        TODO()
+    }
+
+    private fun shuntingYardAlgorithm(tokens: List<Token>): List<Token> {
+        val operations = mutableListOf<Token>()
+        val output = mutableListOf<Token>()
+
+        for (token in tokens) {
+            when (token.type) {
+                in TokenType.operations -> {
+                    while (operations.last().type in TokenType.operations) {
+                        output.add(operations.removeLast())
+                    }
+                    operations.add(token)
+                }
+                TokenType.LEFT_BRACKET -> {
+                    operations.add(token)
+                }
+                TokenType.RIGHT_BRACKET -> {
+                    while (operations.last().type != TokenType.LEFT_BRACKET) {
+                        output.add(operations.removeLast())
+                    }
+                    output.removeLast()
+                }
+                in TokenType.dataSource -> {
+                    output.add(token)
+                }
+                else -> {
+                    throw InterpretationException("Syntax Error: Unknown token $token")
+                }
+            }
+        }
+        return output
     }
 }

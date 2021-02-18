@@ -8,4 +8,9 @@ enum class TokenType(val pattern: String) {
     DIFFERENCE("-"),
     LEFT_BRACKET("""\("""),
     RIGHT_BRACKET("""\)""");
+
+    companion object{
+        val operations = listOf(UNION, INTERSECTION, DIFFERENCE)
+        val dataSource = listOf(ALL_LIKED, PLAYLIST)
+    }
 }
