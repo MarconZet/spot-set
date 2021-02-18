@@ -28,7 +28,8 @@ class QueryInterpreter {
     }
 
     fun syntaxAnalysis(tokens: List<Token>): AST {
-        TODO()
+        val rpn = shuntingYardAlgorithm(tokens)
+        return buildAST(rpn)
     }
 
     private fun shuntingYardAlgorithm(tokens: List<Token>): List<Token> {
@@ -56,11 +57,39 @@ class QueryInterpreter {
                     output.add(token)
                 }
                 else -> {
-                    throw InterpretationException("Syntax Error: Unknown token $token")
+                    throw InterpretationException("Syntax Error: Unknown token during RPN conversion: $token")
                 }
             }
         }
         output.addAll(operations.reversed())
         return output
+    }
+
+    private fun buildAST(tokens: List<Token>): AST {
+        val ast = mutableListOf<AST>()
+
+        tokens.forEach { token ->
+            when (token.type) {
+                TokenType.PLAYLIST -> ast.add(AST.Playlist(token))
+                TokenType.ALL_LIKED -> ast.add(AST.AllLiked(token))
+                in TokenType.operations -> {
+                    val right = ast.removeLast()
+                    val left = ast.removeLast()
+                    when (token.type) {
+                        TokenType.UNION -> ast.add(AST.Union(left, token, right))
+                        TokenType.INTERSECTION -> ast.add(AST.Intersection(left, token, right))
+                        TokenType.DIFFERENCE -> ast.add(AST.Difference(left, token, right))
+                        else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
+                    }
+
+                }
+                else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
+            }
+        }
+
+        if (ast.size != 1)
+            throw InterpretationException("Syntax Error: Not a single expression - Next AST node: ${ast[1]}")
+
+        return ast.first()
     }
 }

@@ -59,4 +59,11 @@ internal class QueryInterpreterTest {
             assertIterableEquals(expected, rpn)
         }
     }
+
+    @Test
+    fun buildingASTTest(){
+        val tokens = interpreter.lexicalAnalysis("A+(B-C)")
+        val ast = interpreter.syntaxAnalysis(tokens)
+        assertEquals(ast.token.type, TokenType.UNION)
+    }
 }
