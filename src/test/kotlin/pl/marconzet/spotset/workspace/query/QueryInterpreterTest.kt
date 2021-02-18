@@ -45,10 +45,18 @@ internal class QueryInterpreterTest {
             ?.apply { isAccessible = true }
             ?: throw RuntimeException("Method to test not found")
 
+        run {
+            val tokens = interpreter.lexicalAnalysis("(A+B)-C")
+            val rpn = f.call(interpreter, tokens) as List<Token>
+            val expected = listOf(tokens[1], tokens[3], tokens[2], tokens[6], tokens[5])
+            assertIterableEquals(expected, rpn)
+        }
 
-        val tokens = interpreter.lexicalAnalysis("(A+B)-C")
-        val rpn = f.call(interpreter, tokens) as List<Token>
-        val expected = listOf(tokens[1], tokens[3], tokens[2], tokens[6], tokens[5])
-        assertIterableEquals(expected, rpn)
+        run {
+            val tokens = interpreter.lexicalAnalysis("A+(B-C)")
+            val rpn = f.call(interpreter, tokens) as List<Token>
+            val expected = listOf(tokens[0], tokens[3], tokens[5], tokens[4], tokens[1])
+            assertIterableEquals(expected, rpn)
+        }
     }
 }

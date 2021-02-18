@@ -38,7 +38,7 @@ class QueryInterpreter {
         for (token in tokens) {
             when (token.type) {
                 in TokenType.operations -> {
-                    while (operations.last().type in TokenType.operations) {
+                    while (operations.lastOrNull()?.type in TokenType.operations) {
                         output.add(operations.removeLast())
                     }
                     operations.add(token)
@@ -50,7 +50,7 @@ class QueryInterpreter {
                     while (operations.last().type != TokenType.LEFT_BRACKET) {
                         output.add(operations.removeLast())
                     }
-                    output.removeLast()
+                    operations.removeLast()
                 }
                 in TokenType.dataSource -> {
                     output.add(token)
@@ -60,6 +60,7 @@ class QueryInterpreter {
                 }
             }
         }
+        output.addAll(operations.reversed())
         return output
     }
 }
