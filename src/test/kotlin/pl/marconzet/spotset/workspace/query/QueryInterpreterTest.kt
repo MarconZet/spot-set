@@ -61,9 +61,17 @@ internal class QueryInterpreterTest {
     }
 
     @Test
-    fun buildingASTTest(){
+    fun buildASTTreeTest() {
         val tokens = interpreter.lexicalAnalysis("A+(B-C)")
         val ast = interpreter.syntaxAnalysis(tokens)
         assertEquals(ast.token.type, TokenType.UNION)
+    }
+
+    @Test
+    fun multipleExpressionsTest() {
+        val tokens = interpreter.lexicalAnalysis("A+BA+B")
+        assertThrows(InterpretationException::class.java) {
+            interpreter.syntaxAnalysis(tokens)
+        }
     }
 }
