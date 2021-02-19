@@ -3,7 +3,11 @@ package pl.marconzet.spotset.workspace.query
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.mockito.Mockito
 import pl.marconzet.spotset.exception.InterpretationException
+import pl.marconzet.spotset.security.Spotify
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.full.memberProperties
@@ -11,6 +15,7 @@ import kotlin.reflect.jvm.isAccessible
 
 internal class QueryInterpreterTest {
     private val interpreter = QueryInterpreter()
+    private val spotifyMock: Spotify = Mockito.mock(Spotify::class.java)
 
     @Test
     fun tokenizeTest() {
@@ -72,6 +77,29 @@ internal class QueryInterpreterTest {
         val tokens = interpreter.lexicalAnalysis("A+BA+B")
         assertThrows(InterpretationException::class.java) {
             interpreter.syntaxAnalysis(tokens)
+        }
+    }
+
+    @Test
+    fun executionTreeTest() {
+        val tokens = interpreter.lexicalAnalysis("A+(B-C)")
+        val ast = interpreter.syntaxAnalysis(tokens)
+
+        val playlists = listOf("a", "b", "c")
+
+        val exec = interpreter.semanticAnalysis(ast, playlists, spotifyMock)
+
+        assertEquals(exec::class, ExecutionTree.Union::class)
+    }
+
+    @Test
+    fun unknownPlaylistTest() {
+        val tokens = interpreter.lexicalAnalysis("C")
+        val ast = interpreter.syntaxAnalysis(tokens)
+
+        val playlists = listOf("a", "b")
+        assertThrows(InterpretationException::class.java) {
+            interpreter.semanticAnalysis(ast, playlists, spotifyMock)
         }
     }
 }
