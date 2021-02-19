@@ -20,7 +20,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 authorize(anyRequest, permitAll)
             }
             oauth2Login {
-                defaultSuccessUrl("/workspace", true)
+                defaultSuccessUrl("/workspace", false)
             }
 
             csrf {

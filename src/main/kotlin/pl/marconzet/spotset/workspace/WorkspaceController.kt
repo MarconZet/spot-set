@@ -6,7 +6,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import pl.marconzet.spotset.data.api.TrackSimple
+import pl.marconzet.spotset.data.api.PlaylistTrackPaging
+import pl.marconzet.spotset.data.api.Track
 import pl.marconzet.spotset.data.dto.QueryDTO
 import pl.marconzet.spotset.exception.WrongPrincipalException
 import pl.marconzet.spotset.logger
@@ -44,7 +45,7 @@ class WorkspaceController(
 
     @GetMapping("test")
     @ResponseBody
-    fun test(): List<TrackSimple> {
+    fun test(): List<Track> {
         val playlists = spotify.getPlaylists()
         return spotify.getPlaylistsTracks(playlists.first().id)
     }

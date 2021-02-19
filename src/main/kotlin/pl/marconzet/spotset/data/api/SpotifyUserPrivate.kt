@@ -1,7 +1,7 @@
 package pl.marconzet.spotset.data.api
 
 data class SpotifyUserPrivate(
-    val country : String?,
+    val country : String,
     val display_name : String?,
     val email : String?,
     val explicit_content : ExplicitContentSettings?,
