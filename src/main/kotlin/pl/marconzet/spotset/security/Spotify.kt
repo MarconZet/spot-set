@@ -11,6 +11,7 @@ import pl.marconzet.spotset.configuration.ApiBinding
 import pl.marconzet.spotset.configuration.SpotifyConfig
 import pl.marconzet.spotset.data.api.*
 import pl.marconzet.spotset.logger
+import kotlin.reflect.KClass
 
 @Service
 @RequestScope
@@ -18,23 +19,21 @@ class Spotify(
     authorizedClientService: OAuth2AuthorizedClientService,
     spotifyConfig: SpotifyConfig
 ) {
-    val logger = logger()
-
     private val authentication = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
-    val principal = authentication.principal as SpotifyOAuth2User
+    private val principal = authentication.principal as SpotifyOAuth2User
 
     private val baseUrl = spotifyConfig.baseUrl
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
 
-    private val market: String by lazy { getProfile().country }
+    private val market = principal.attributes["country"] as String
 
-    fun getProfile(): SpotifyUserPrivate {
-        return restTemplate.getForObject("$baseUrl/me", SpotifyUserPrivate::class.java) ?: throw RuntimeException()
-    }
+    fun getUserPlaylists(): List<Playlist> {
+        val params = mapOf(
+            "limit" to "50",
+        )
 
-    fun getPlaylists(): List<PlaylistSimple> {
-        return restTemplate.getForObject("$baseUrl/me/playlists", PlaylistPaging::class.java)?.items
-            ?: throw RuntimeException()
+        val uri = buildUri("$baseUrl/me/playlists", params)
+        return acc(uri, UserPlaylistsPaging::class).flatMap { it.items }
     }
 
     fun getPlaylistsTracks(playlistId: String): List<Track> {
@@ -44,38 +43,32 @@ class Spotify(
             "limit" to "100",
             "fields" to "items(track(name,id)),next"
         )
-        val builder = UriComponentsBuilder.fromUriString("$baseUrl/playlists/$playlistId/tracks").apply {
-            params.entries.forEach {
-                queryParam(it.key, it.value)
-            }
-        }
 
-        fun acc(url: String): List<TrackListItem> {
-            val res = restTemplate.getForObject(url, TrackListPaging::class.java)
-                ?: throw RuntimeException()
-            return res.itemTracks + (res.next?.let { s -> acc(s) } ?: emptyList())
-        }
-
-        return acc(builder.toUriString()).map { it.track }
+        val uri = buildUri("$baseUrl/playlists/$playlistId/tracks", params)
+        return acc(uri, TrackListPaging::class).flatMap { it.items }.map { it.track }
     }
 
     fun getAllLikedSongs(): List<Track> {
         val params = mapOf(
             "limit" to "50",
         )
-        val builder = UriComponentsBuilder.fromUriString("$baseUrl/me/tracks").apply {
+
+        val uri = buildUri("$baseUrl/me/tracks", params)
+        return acc(uri, TrackListPaging::class).flatMap { it.items }.map { it.track }
+    }
+
+    private fun buildUri(baseUrl: String, params: Map<String, String>): String {
+        return UriComponentsBuilder.fromUriString(baseUrl).apply {
             params.entries.forEach {
                 queryParam(it.key, it.value)
             }
-        }
+        }.toUriString()
+    }
 
-        fun acc(url: String): List<TrackListItem> {
-            val res = restTemplate.getForObject(url, TrackListPaging::class.java)
-                ?: throw RuntimeException()
-            return res.itemTracks + (res.next?.let { s -> acc(s) } ?: emptyList())
-        }
-
-        return acc(builder.toUriString()).map { it.track }
+    private fun <T : Paging> acc(url: String, clazz: KClass<T>): List<T> {
+        val res = restTemplate.getForObject(url, clazz.java)
+            ?: throw RuntimeException()
+        return listOf(res) + (res.next?.let { s -> acc(s, clazz) } ?: emptyList())
     }
 
     private fun getAccessToken(authorizedClientService: OAuth2AuthorizedClientService) =

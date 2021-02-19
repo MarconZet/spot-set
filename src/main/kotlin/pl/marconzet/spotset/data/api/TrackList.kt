@@ -1,9 +1,9 @@
 package pl.marconzet.spotset.data.api
 
 data class TrackListPaging(
-    val itemTracks: List<TrackListItem>,
-    val next: String?
-)
+    val items: List<TrackListItem>,
+    override val next: String?
+) : Paging(next)
 
 data class TrackListItem(
     val track: Track
