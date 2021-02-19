@@ -1,11 +1,11 @@
 package pl.marconzet.spotset.data.api
 
-data class PlaylistTrackPaging(
-    val items: List<PlaylistItem>,
+data class TrackListPaging(
+    val itemTracks: List<TrackListItem>,
     val next: String?
 )
 
-data class PlaylistItem(
+data class TrackListItem(
     val track: Track
 )
 

@@ -1,10 +1,9 @@
 package pl.marconzet.spotset.configuration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.ResponseErrorHandler
-import pl.marconzet.spotset.data.api.SpotifyError
+import pl.marconzet.spotset.data.api.ErrorResponse
 import pl.marconzet.spotset.exception.SpotifyApiException
 
 class RestTemplateErrorHandler : ResponseErrorHandler {
@@ -12,9 +11,8 @@ class RestTemplateErrorHandler : ResponseErrorHandler {
     override fun hasError(response: ClientHttpResponse): Boolean {
         return response.statusCode.isError
     }
-
     override fun handleError(response: ClientHttpResponse) {
-        val error: SpotifyError = mapper.readValue(response.body)
+        val error = mapper.readValue(response.body, ErrorResponse::class.java)
         throw SpotifyApiException(error)
     }
 

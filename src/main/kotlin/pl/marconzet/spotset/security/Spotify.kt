@@ -50,10 +50,29 @@ class Spotify(
             }
         }
 
-        fun acc(url: String): List<PlaylistItem> {
-            val res = restTemplate.getForObject(url, PlaylistTrackPaging::class.java)
+        fun acc(url: String): List<TrackListItem> {
+            val res = restTemplate.getForObject(url, TrackListPaging::class.java)
                 ?: throw RuntimeException()
-            return res.items + (res.next?.let { s -> acc(s) } ?: emptyList())
+            return res.itemTracks + (res.next?.let { s -> acc(s) } ?: emptyList())
+        }
+
+        return acc(builder.toUriString()).map { it.track }
+    }
+
+    fun getAllLikedSongs(): List<Track> {
+        val params = mapOf(
+            "limit" to "50",
+        )
+        val builder = UriComponentsBuilder.fromUriString("$baseUrl/me/tracks").apply {
+            params.entries.forEach {
+                queryParam(it.key, it.value)
+            }
+        }
+
+        fun acc(url: String): List<TrackListItem> {
+            val res = restTemplate.getForObject(url, TrackListPaging::class.java)
+                ?: throw RuntimeException()
+            return res.itemTracks + (res.next?.let { s -> acc(s) } ?: emptyList())
         }
 
         return acc(builder.toUriString()).map { it.track }
