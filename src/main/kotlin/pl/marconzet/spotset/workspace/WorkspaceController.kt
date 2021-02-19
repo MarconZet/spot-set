@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import pl.marconzet.spotset.data.api.Track
 import pl.marconzet.spotset.data.dto.QueryDTO
+import pl.marconzet.spotset.exception.InterpretationException
 import pl.marconzet.spotset.exception.WrongPrincipalException
 import pl.marconzet.spotset.logger
 import pl.marconzet.spotset.security.Spotify
@@ -35,23 +36,17 @@ class WorkspaceController(
     @PostMapping("query")
     fun query(@ModelAttribute("form") queryDTO: QueryDTO, errors: BindingResult, model: Model): String {
         logger.info(queryDTO.query)
-        model.addAttribute("result", queryService.processQuery(queryDTO.query ?: ""))
+        if (errors.hasErrors()) {
+            TODO()
+        }
+        val query = queryDTO.query ?: ""
+        try {
+            val res = queryService.processQuery(query)
+            model.addAttribute("result", res)
+        } catch (ex: InterpretationException) {
+            TODO()
+        }
+
         return "result"
-    }
-
-    @Autowired
-    private lateinit var spotify: Spotify
-
-    @GetMapping("test1")
-    @ResponseBody
-    fun test1(): List<Track> {
-        val playlists = spotify.getUserPlaylists()
-        return spotify.getPlaylistsTracks(playlists.first().id)
-    }
-
-    @GetMapping("test2")
-    @ResponseBody
-    fun test2(): List<Track> {
-        return spotify.getAllLikedSongs()
     }
 }

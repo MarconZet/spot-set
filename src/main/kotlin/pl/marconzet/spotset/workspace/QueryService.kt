@@ -9,19 +9,19 @@ import pl.marconzet.spotset.workspace.query.SyntaxAnalysisService
 @Service
 class QueryService(
     private val lexicalAnalysis: LexicalAnalysisService,
-    private val semanticAnalysis: SemanticAnalysisService,
     private val syntaxAnalysis: SyntaxAnalysisService,
+    private val semanticAnalysis: SemanticAnalysisService,
     private val spotify: Spotify
 ) {
 
     fun processQuery(query: String): List<String> {
-        return listOf(query, "ale", "ma", "kot")
-    }
+        val playlists = spotify.getUserPlaylists().map { it.id }
 
-    fun compileQuery(query: String) {
         val tokens = lexicalAnalysis.analyze(query)
         val ast = syntaxAnalysis.analyze(tokens)
-        val exec = semanticAnalysis.analyze(ast, emptyList(), spotify)
-        TODO()
+        val exec = semanticAnalysis.analyze(ast, playlists, spotify)
+
+        return exec.result.map { it.name }
     }
+
 }
