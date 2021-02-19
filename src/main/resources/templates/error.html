@@ -22,14 +22,16 @@
 <main class="container-fluid">
     <div class="row">
         <div class="col-sm-auto justify-content-center mx-auto text-center">
-            <h1 class="text-center">xxx error description</h1>
+            <h1 class="text-center">
+                <span th:text="${status}">xxx</span>
+                <span th:text="${error}">error description</span></h1>
             <p class="lead">
                 An error has occurred
             </p>
         </div>
     </div>
     <div class="row">
-        <p class="col-sm-6 mx-auto justify-content-center">
+        <p class="col-sm-6 mx-auto justify-content-center" th:text="${message}">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus posuere nulla a diam
             vestibulum commodo.
             Phasellus dapibus, dui eu tincidunt vestibulum, diam est tincidunt ligula, ut mollis lorem urna sit
