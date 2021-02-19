@@ -9,7 +9,7 @@ import pl.marconzet.spotset.workspace.query.data.ExecutionTree
 @Service
 class SemanticAnalysisService {
 
-    fun analyze(ast: AST, playlistUrls: List<String>, spotify: Spotify): ExecutionTree {
+    fun analyze(ast: AST, playlistIds: List<String>, spotify: Spotify): ExecutionTree {
         val visited = mutableMapOf<AST, ExecutionTree>()
 
         fun walkTree(ast: AST): ExecutionTree {
@@ -22,9 +22,9 @@ class SemanticAnalysisService {
                 is AST.DataSource.AllLiked -> ExecutionTree.AllLiked(spotify)
                 is AST.DataSource.Playlist -> {
                     val id = ast.token.value.toLowerCase().first().minus('a')
-                    if (id > playlistUrls.size - 1)
+                    if (id > playlistIds.size - 1)
                         throw InterpretationException("Semantic Error: No playlist with id ${ast.token.value}")
-                    ExecutionTree.Playlist(playlistUrls[id], spotify)
+                    ExecutionTree.Playlist(playlistIds[id], spotify)
                 }
                 is AST.Operation -> {
                     val left = walkTree(ast.left)

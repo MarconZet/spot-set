@@ -1,10 +1,5 @@
 package pl.marconzet.spotset.security
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.HttpMethod
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
@@ -13,9 +8,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 import pl.marconzet.spotset.configuration.ApiBinding
 import pl.marconzet.spotset.configuration.SpotifyConfig
-import pl.marconzet.spotset.data.api.PlaylistPaging
-import pl.marconzet.spotset.data.api.PlaylistSimple
-import pl.marconzet.spotset.data.api.SpotifyUserPrivate
+import pl.marconzet.spotset.data.api.*
 import pl.marconzet.spotset.logger
 
 @Service
@@ -32,14 +25,36 @@ class Spotify(
     private val baseUrl = spotifyConfig.baseUrl
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
 
+    private val market: String by lazy { getProfile().country ?: "US" }
+
     fun getProfile(): SpotifyUserPrivate {
         return restTemplate.getForObject("$baseUrl/me", SpotifyUserPrivate::class.java) ?: throw RuntimeException()
     }
 
     fun getPlaylists(): List<PlaylistSimple> {
-//        logger.info(restTemplate.getForObject("$baseUrl/me/playlists", String::class.java))
         return restTemplate.getForObject("$baseUrl/me/playlists", PlaylistPaging::class.java)?.items
             ?: throw RuntimeException()
+    }
+
+    fun getPlaylistsTracks(playlistId: String): List<TrackSimple> {
+        val args = mapOf("market" to market, "additional_types" to "track", "fields" to "next,items.track(name)")
+
+        fun acc(prev: TrackPaging): List<TrackSimple> {
+            return prev.items + (prev.next?.let {
+                acc(
+                    restTemplate.getForObject(
+                        "$baseUrl/playlists/$playlistId/tracks",
+                        TrackPaging::class.java,
+                        args + mapOf("offset" to it)
+                    ) ?: throw RuntimeException()
+                )
+            } ?: emptyList())
+        }
+
+        return acc(
+            restTemplate.getForObject("$baseUrl/playlists/$playlistId/tracks", TrackPaging::class.java, args)
+                ?: throw RuntimeException()
+        )
     }
 
     private fun getAccessToken(authorizedClientService: OAuth2AuthorizedClientService) =
