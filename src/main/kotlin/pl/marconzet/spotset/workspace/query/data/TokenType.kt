@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.workspace.query
+package pl.marconzet.spotset.workspace.query.data
 
 enum class TokenType(val pattern: String) {
     ALL_LIKED("&&"),

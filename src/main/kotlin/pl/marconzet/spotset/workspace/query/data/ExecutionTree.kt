@@ -1,7 +1,6 @@
-package pl.marconzet.spotset.workspace.query
+package pl.marconzet.spotset.workspace.query.data
 
 import pl.marconzet.spotset.security.Spotify
-import java.lang.RuntimeException
 
 sealed class ExecutionTree {
     class Playlist(url: String, spotify: Spotify) : ExecutionTree()

@@ -9,7 +9,6 @@ import pl.marconzet.spotset.data.dto.QueryDTO
 import pl.marconzet.spotset.exception.WrongPrincipalException
 import pl.marconzet.spotset.logger
 import pl.marconzet.spotset.security.SpotifyOAuth2User
-import pl.marconzet.spotset.workspace.query.QueryService
 
 @Controller
 @RequestMapping("/workspace")

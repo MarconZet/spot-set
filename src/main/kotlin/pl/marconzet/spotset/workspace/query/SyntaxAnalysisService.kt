@@ -2,70 +2,16 @@ package pl.marconzet.spotset.workspace.query
 
 import org.springframework.stereotype.Service
 import pl.marconzet.spotset.exception.InterpretationException
-import pl.marconzet.spotset.security.Spotify
+import pl.marconzet.spotset.workspace.query.data.AST
+import pl.marconzet.spotset.workspace.query.data.Token
+import pl.marconzet.spotset.workspace.query.data.TokenType
 
 @Service
-class QueryInterpreter {
-    fun lexicalAnalysis(query: String): List<Token> {
-        val tokenTypes = enumValues<TokenType>()
-        val tokens = tokenTypes.flatMap { type ->
-            type.pattern.toRegex().findAll(query).map { Token(type, it.value, it.range.first) }
-        }.sortedBy { it.position }
-        validateTokenization(query, tokens)
-        return tokens
-    }
+class SyntaxAnalysisService {
 
-    fun syntaxAnalysis(tokens: List<Token>): AST {
+    fun analyze(tokens: List<Token>): AST {
         val rpn = shuntingYardAlgorithm(tokens)
         return buildAST(rpn)
-    }
-
-    fun semanticAnalysis(ast: AST, playlistUrls: List<String>, spotify: Spotify): ExecutionTree {
-        val visited = mutableMapOf<AST, ExecutionTree>()
-
-        fun walkTree(ast: AST): ExecutionTree {
-            val cache = visited[ast]
-            if (cache != null) {
-                return cache
-            }
-
-            val exec: ExecutionTree = when (ast) {
-                is AST.DataSource.AllLiked -> ExecutionTree.AllLiked(spotify)
-                is AST.DataSource.Playlist -> {
-                    val id = ast.token.value.toLowerCase().first().minus('a')
-                    if (id > playlistUrls.size-1)
-                        throw InterpretationException("Semantic Error: No playlist with id ${ast.token.value}")
-                    ExecutionTree.Playlist(playlistUrls[id], spotify)
-                }
-                is AST.Operation -> {
-                    val left = walkTree(ast.left)
-                    val right = walkTree(ast.right)
-                    when (ast) {
-                        is AST.Operation.Difference -> ExecutionTree.Difference(left, right)
-                        is AST.Operation.Intersection -> ExecutionTree.Intersection(left, right)
-                        is AST.Operation.Union -> ExecutionTree.Union(left, right)
-                    }
-                }
-            }
-
-            visited[ast] = exec
-            return exec
-        }
-
-        return walkTree(ast)
-    }
-
-
-    private fun validateTokenization(query: String, tokens: List<Token>, lastChar: Int = 0): Boolean {
-        if (tokens.isEmpty() and query.isBlank())
-            return true
-        val head = tokens.first()
-        val clearedQuery = query.dropWhile { it.isWhitespace() }
-        if (clearedQuery.startsWith(head.value)) {
-            return validateTokenization(clearedQuery.removePrefix(head.value), tokens.drop(1), head.position)
-        } else {
-            throw InterpretationException("Lexical Error: Unknown identifier around characters $lastChar-${head.position}")
-        }
     }
 
     private fun shuntingYardAlgorithm(tokens: List<Token>): List<Token> {

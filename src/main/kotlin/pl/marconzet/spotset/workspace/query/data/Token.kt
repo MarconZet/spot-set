@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.workspace.query
+package pl.marconzet.spotset.workspace.query.data
 
 data class Token(
     val type: TokenType,

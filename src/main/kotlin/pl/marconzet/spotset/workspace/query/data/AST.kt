@@ -1,6 +1,4 @@
-package pl.marconzet.spotset.workspace.query
-
-import javax.xml.crypto.Data
+package pl.marconzet.spotset.workspace.query.data
 
 sealed class AST(val token: Token) {
     sealed class DataSource(token: Token) : AST(token) {
