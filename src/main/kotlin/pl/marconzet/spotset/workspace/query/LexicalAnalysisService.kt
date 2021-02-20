@@ -24,12 +24,15 @@ class LexicalAnalysisService {
     private fun validateTokenization(query: String, tokens: List<Token>, lastChar: Int = 0): Boolean {
         if (tokens.isEmpty() and query.isBlank())
             return true
+        if (tokens.isEmpty()) {
+            throw InterpretationException("Lexical Error: Could not tokenize starting form character $lastChar")
+        }
         val head = tokens.first()
         val clearedQuery = query.dropWhile { it.isWhitespace() }
         if (clearedQuery.startsWith(head.value)) {
             return validateTokenization(clearedQuery.removePrefix(head.value), tokens.drop(1), head.position)
         } else {
-            throw InterpretationException("Lexical Error: Unknown identifier around characters $lastChar-${head.position}")
+            throw InterpretationException("Lexical Error: Could not tokenize around characters $lastChar-${head.position}")
         }
     }
 
