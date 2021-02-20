@@ -20,7 +20,7 @@ class WorkspaceService(
 
         val userId = principal.user.id
         val queries = userRepository.getUserById(userId).queryHistory.map { it.query_text }
-        val playlists = spotify.getUserPlaylists().map { it.name }
+        val playlists = spotify.getUserPlaylists().withIndex().map { "${'A' + it.index}: ${it.value.name}" }
         return WorkspaceDTO(playlists, queries)
     }
 }
