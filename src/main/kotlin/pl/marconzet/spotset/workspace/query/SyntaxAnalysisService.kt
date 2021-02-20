@@ -55,22 +55,25 @@ class SyntaxAnalysisService {
                 TokenType.PLAYLIST -> ast.add(AST.DataSource.Playlist(token))
                 TokenType.ALL_LIKED -> ast.add(AST.DataSource.AllLiked(token))
                 in TokenType.operations -> {
-                    val right = ast.removeLast()
-                    val left = ast.removeLast()
-                    when (token.type) {
-                        TokenType.UNION -> ast.add(AST.Operation.Union(left, token, right))
-                        TokenType.INTERSECTION -> ast.add(AST.Operation.Intersection(left, token, right))
-                        TokenType.DIFFERENCE -> ast.add(AST.Operation.Difference(left, token, right))
-                        else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
+                    try {
+                        val right = ast.removeLast()
+                        val left = ast.removeLast()
+                        when (token.type) {
+                            TokenType.UNION -> ast.add(AST.Operation.Union(left, token, right))
+                            TokenType.INTERSECTION -> ast.add(AST.Operation.Intersection(left, token, right))
+                            TokenType.DIFFERENCE -> ast.add(AST.Operation.Difference(left, token, right))
+                            else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
+                        }
+                    } catch (ex: NoSuchElementException) {
+                        throw InterpretationException("Syntax Error: Missing required expressions around $token")
                     }
-
                 }
                 else -> throw InterpretationException("Syntax Error: Can't build AST - Invalid token: $token")
             }
         }
 
         if (ast.size != 1)
-            throw InterpretationException("Syntax Error: Not a single expression - Next AST node: ${ast[1]}")
+            throw InterpretationException("Syntax Error: Not a single expression - Next AST node: ${ast[1].token}")
 
         return ast.first()
     }

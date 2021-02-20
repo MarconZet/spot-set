@@ -40,8 +40,10 @@
         </div>
         <main class="col-md-9, col-lg-10 mx-auto pt-3">
             <form action="#" th:action="@{/workspace/query}" th:object="${form}" method="post">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="queryInputValue" list="datalist"
+                <div class="input-group has-validation">
+                    <input type="text"
+                           class="form-control" th:classappend="${form_error != null}? 'is-invalid'"
+                           id="queryInputValue" list="datalist"
                            placeholder="Input your query" th:field="*{query}"/>
                     <datalist id="datalist" th:remove="all-but-first">
                         <option value="A+B" th:each="query: ${workspace.queryHistory}" th:value="${query}">
@@ -49,6 +51,7 @@
                         <option value="(A+B)-C">
                     </datalist>
                     <button class="btn btn-outline-secondary btn-outline-dark" type="button">Submit</button>
+                    <div class="invalid-feedback" th:text="${form_error}">Error message</div>
                 </div>
             </form>
             <div class="border-bottom border-top pt-3">

@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import pl.marconzet.spotset.data.model.User
 
 class SpotifyOAuth2User(
-    private val user: User,
+    val user: User,
     private val attributes: MutableMap<String, Any>,
     private val authorities: MutableCollection<out GrantedAuthority>
 ) : OAuth2User {
