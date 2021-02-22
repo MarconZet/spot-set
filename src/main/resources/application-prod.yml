@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${SS_DB_URL}
+    username: ${SS_DB_USER}
+    password: ${SS_DB_PASS}
+    driver-class-name: "org.postgresql.Driver"
+  jpa:
+    hibernate:
+      ddl-auto: validate

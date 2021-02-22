@@ -1,23 +1,26 @@
 package pl.marconzet.spotset.webapi
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
+import org.springframework.web.context.annotation.SessionScope
 import org.springframework.web.util.UriComponentsBuilder
 import pl.marconzet.spotset.webapi.api.*
 import pl.marconzet.spotset.security.SpotifyOAuth2User
+import java.security.Principal
 import kotlin.reflect.KClass
 
 @Service
-@RequestScope
+@SessionScope
 class Spotify(
     authorizedClientService: OAuth2AuthorizedClientService,
-    spotifyConfig: SpotifyConfig
+    spotifyConfig: SpotifyConfig,
 ) {
-    private val authentication = SecurityContextHolder.getContext().authentication.principal as OAuth2AuthenticationToken
+    private val authentication = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
     private val principal = authentication.principal as SpotifyOAuth2User
 
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate

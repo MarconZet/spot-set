@@ -28,7 +28,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
                 defaultSuccessUrl("/workspace", false)
             }
 
-            if(activeProfile.isBlank()) {
+            if(activeProfile.contains("dev")) {
                 csrf {
                     disable()
                 }

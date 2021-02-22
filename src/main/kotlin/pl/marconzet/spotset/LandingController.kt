@@ -13,6 +13,7 @@ class LandingController {
 
     @GetMapping("/")
     fun landing(model: Model): String {
+        Thread.dumpStack()
         return "index"
     }
 }

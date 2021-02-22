@@ -8,8 +8,7 @@ import org.springframework.context.annotation.PropertySource
 @PropertySource("classpath:application.properties")
 class SpotifyConfig {
 
-    @Value("\${spotset.api.url}")
-    lateinit var baseUrl: String
+    val baseUrl: String = """https://api.spotify.com/v1"""
 
     val clientName: String = "spotify"
 }
