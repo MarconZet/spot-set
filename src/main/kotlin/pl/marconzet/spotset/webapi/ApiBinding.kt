@@ -1,8 +1,7 @@
-package pl.marconzet.spotset.configuration
+package pl.marconzet.spotset.webapi
 
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.web.client.RestTemplate
-import pl.marconzet.spotset.logger
 
 class ApiBinding(private val accessToken: String?) {
     val restTemplate: RestTemplate = RestTemplate().apply {

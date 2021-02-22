@@ -1,7 +1,7 @@
 package pl.marconzet.spotset.workspace
 
 import org.springframework.stereotype.Service
-import pl.marconzet.spotset.security.Spotify
+import pl.marconzet.spotset.webapi.Spotify
 import pl.marconzet.spotset.workspace.query.LexicalAnalysisService
 import pl.marconzet.spotset.workspace.query.SemanticAnalysisService
 import pl.marconzet.spotset.workspace.query.SyntaxAnalysisService

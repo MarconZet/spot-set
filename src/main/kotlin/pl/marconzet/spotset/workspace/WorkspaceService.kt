@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import pl.marconzet.spotset.data.dto.WorkspaceDTO
 import pl.marconzet.spotset.exception.WrongPrincipalException
 import pl.marconzet.spotset.repository.UserRepository
-import pl.marconzet.spotset.security.Spotify
+import pl.marconzet.spotset.webapi.Spotify
 import pl.marconzet.spotset.security.SpotifyOAuth2User
 
 @Service

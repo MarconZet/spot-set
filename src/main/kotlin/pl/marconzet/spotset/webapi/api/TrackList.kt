@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.data.api
+package pl.marconzet.spotset.webapi.api
 
 data class TrackListPaging(
     val items: List<TrackListItem>,

@@ -1,7 +1,7 @@
 package pl.marconzet.spotset.workspace.query.data
 
-import pl.marconzet.spotset.data.api.Track
-import pl.marconzet.spotset.security.Spotify
+import pl.marconzet.spotset.webapi.api.Track
+import pl.marconzet.spotset.webapi.Spotify
 
 sealed class ExecutionTree {
     class Playlist(val id: String, val spotify: Spotify) : ExecutionTree()

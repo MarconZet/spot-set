@@ -1,9 +1,9 @@
-package pl.marconzet.spotset.configuration
+package pl.marconzet.spotset.webapi
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.ResponseErrorHandler
-import pl.marconzet.spotset.data.api.ErrorResponse
+import pl.marconzet.spotset.webapi.api.ErrorResponse
 import pl.marconzet.spotset.exception.SpotifyApiException
 
 class RestTemplateErrorHandler : ResponseErrorHandler {

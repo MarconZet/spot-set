@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.security
+package pl.marconzet.spotset.webapi
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient
@@ -7,10 +7,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 import org.springframework.web.util.UriComponentsBuilder
-import pl.marconzet.spotset.configuration.ApiBinding
-import pl.marconzet.spotset.configuration.SpotifyConfig
-import pl.marconzet.spotset.data.api.*
-import pl.marconzet.spotset.logger
+import pl.marconzet.spotset.webapi.api.*
+import pl.marconzet.spotset.security.SpotifyOAuth2User
 import kotlin.reflect.KClass
 
 @Service
@@ -19,12 +17,12 @@ class Spotify(
     authorizedClientService: OAuth2AuthorizedClientService,
     spotifyConfig: SpotifyConfig
 ) {
-    private val authentication = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
+    private val authentication = SecurityContextHolder.getContext().authentication.principal as OAuth2AuthenticationToken
     private val principal = authentication.principal as SpotifyOAuth2User
 
-    private val baseUrl = spotifyConfig.baseUrl
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
 
+    private val baseUrl = spotifyConfig.baseUrl
     private val market = principal.attributes["country"] as String
 
     fun getUserPlaylists(): List<Playlist> {

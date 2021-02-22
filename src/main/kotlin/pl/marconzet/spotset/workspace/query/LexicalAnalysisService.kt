@@ -2,9 +2,6 @@ package pl.marconzet.spotset.workspace.query
 
 import org.springframework.stereotype.Service
 import pl.marconzet.spotset.exception.InterpretationException
-import pl.marconzet.spotset.security.Spotify
-import pl.marconzet.spotset.workspace.query.data.AST
-import pl.marconzet.spotset.workspace.query.data.ExecutionTree
 import pl.marconzet.spotset.workspace.query.data.Token
 import pl.marconzet.spotset.workspace.query.data.TokenType
 

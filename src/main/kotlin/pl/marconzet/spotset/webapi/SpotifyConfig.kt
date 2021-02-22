@@ -1,4 +1,4 @@
-package pl.marconzet.spotset.configuration
+package pl.marconzet.spotset.webapi
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration

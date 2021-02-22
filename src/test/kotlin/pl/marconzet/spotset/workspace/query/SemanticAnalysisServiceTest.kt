@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import pl.marconzet.spotset.exception.InterpretationException
-import pl.marconzet.spotset.security.Spotify
+import pl.marconzet.spotset.webapi.Spotify
 import pl.marconzet.spotset.workspace.query.data.ExecutionTree
 
 internal class SemanticAnalysisServiceTest {
