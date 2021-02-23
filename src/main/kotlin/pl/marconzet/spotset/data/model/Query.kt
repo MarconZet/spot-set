@@ -8,6 +8,6 @@ data class Query(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
     @ManyToOne
-    val user: User,
+    val ssUser: SsUser,
     val query_text: String
 )

@@ -18,7 +18,7 @@ class WorkspaceService(
         if (principal !is SpotifyOAuth2User)
             throw WrongPrincipalException()
 
-        val userId = principal.user.id
+        val userId = principal.ssUser.id
         val queries = userRepository.getUserById(userId).queryHistory.map { it.query_text }
         val playlists = spotify.getUserPlaylists().withIndex().map { "${'A' + it.index}: ${it.value.name}" }
         return WorkspaceDTO(playlists, queries)
