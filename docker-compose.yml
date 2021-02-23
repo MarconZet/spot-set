@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  spot_set:
+    container_name: spotset
+    build: .
+    environment:
+      spring_profiles_active: prod
+      SS_PORT: 8000
+      SS_DB_URL: jdbc:postgresql://database:5432/spotset
+      SS_DB_USER: $DB_USER
+      SS_DB_PASS: $DB_PASS
+      SS_CLIENT_ID: $CLIENT_ID
+      SS_CLIENT_SECRET: $CLIENT_SECRET
+    ports:
+      - 9901:8000
+    depends_on:
+      - database
+
+  database:
+    container_name: spotset_database
+    image: postgres
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASS
+      POSTGRES_DB: spotset
+    ports:
+    - 9902:5432
+    volumes:
+    - "./src/main/resources/db_schema:/docker-entrypoint-initdb.d"
+    restart: unless-stopped
+
