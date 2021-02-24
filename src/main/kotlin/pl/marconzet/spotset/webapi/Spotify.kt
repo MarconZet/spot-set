@@ -22,6 +22,7 @@ class Spotify(
 ) {
     private val authentication = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
     private val principal = authentication.principal as SpotifyOAuth2User
+    val ssUser = principal.ssUser
 
     private val restTemplate = ApiBinding(getAccessToken(authorizedClientService)).restTemplate
 
