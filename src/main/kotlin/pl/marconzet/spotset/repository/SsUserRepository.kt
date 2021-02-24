@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 import pl.marconzet.spotset.data.model.SsUser
 
 @Repository
-interface UserRepository : CrudRepository<SsUser, Long> {
-    fun getUserBySpotifyId(spotifyId: String) : SsUser?
-    fun getUserById(id: Long) : SsUser
+interface SsUserRepository : CrudRepository<SsUser, Long> {
+    fun getSsUserBySpotifyId(spotifyId: String): SsUser?
+    fun getSsUserById(id: Long): SsUser
 }

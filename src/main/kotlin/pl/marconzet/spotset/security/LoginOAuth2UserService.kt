@@ -6,11 +6,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import pl.marconzet.spotset.webapi.SpotifyConfig
 import pl.marconzet.spotset.data.model.SsUser
-import pl.marconzet.spotset.repository.UserRepository
+import pl.marconzet.spotset.repository.SsUserRepository
 
 @Service
 class LoginOAuth2UserService(
-    private val userRepository: UserRepository,
+    private val ssUserRepository: SsUserRepository,
     private val spotifyConfig: SpotifyConfig
 ) : DefaultOAuth2UserService() {
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
@@ -19,8 +19,8 @@ class LoginOAuth2UserService(
 
         val oAuth2UserInfo = super.loadUser(userRequest)
 
-        val user = userRepository.getUserBySpotifyId(oAuth2UserInfo.name)
-            ?: userRepository.save(SsUser(0, oAuth2UserInfo.name, emptyList()))
+        val user = ssUserRepository.getSsUserBySpotifyId(oAuth2UserInfo.name)
+            ?: ssUserRepository.save(SsUser(0, oAuth2UserInfo.name, emptyList()))
 
         return SpotifyOAuth2User(user, oAuth2UserInfo.attributes, oAuth2UserInfo.authorities)
     }
